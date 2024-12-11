@@ -8,7 +8,7 @@
     <script src="../js/register.js"></script>
 </head>
 <body>
-    <form action="../actions/register_action.php" method="post">
+    <form action="actions/register_action.php" method="post">
         <label for="uname">Username</label>
         <input type="text" name="uname" id="uname" placeholder="John">
         
