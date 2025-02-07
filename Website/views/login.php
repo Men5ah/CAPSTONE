@@ -16,6 +16,7 @@ if(isset($_GET['error'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="../css/login.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <form action="../actions/login_action.php" method="post">
@@ -25,7 +26,10 @@ if(isset($_GET['error'])) {
         <label for="password">Password</label>
         <input type="password" name="password" id="password"  placeholder="*********">
         
+        <div class="g-recaptcha" data-sitekey="6LcdTrgqAAAAAANs1HewfqCeXa5zRGTpoARHQ7qC"></div>
+
         <button type="submit" name="login">Login</button>
     </form>
+    <script src="../js/interaction.js"></script>
 </body>
 </html>
