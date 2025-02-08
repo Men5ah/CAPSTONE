@@ -9,7 +9,7 @@ import time
 driver = webdriver.Edge()
 
 # Get website
-driver.get('http://10.5.0.2/Projects/CAPSTONE/Website/views/login.php')
+driver.get('http://mycapstone.free.nf/Website/views/login.php?i=1')
 
 
 # Find necessary elements and input data

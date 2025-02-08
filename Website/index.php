@@ -23,5 +23,6 @@
 
         <input type="submit" value="Sign Up">
     </form>
+    <a href="views/login.php">Already have an account? Login</a>
 </body>
 </html>
