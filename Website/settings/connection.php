@@ -1,8 +1,8 @@
 <?php
-define('datasource', 'localhost');
-define('db', 'capstonedb');//databse
-define('uName','root');//username
-define('pwd','');//password
+define('datasource', 'sql205.infinityfree.com');
+define('db', 'if0_38267486_capstonedb');//databse
+define('uName','if0_38267486');//username
+define('pwd','3nuxX7VdM');//password
 
 // Function to establish a database connection
 function get_connection() {
