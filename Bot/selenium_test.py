@@ -9,7 +9,7 @@ import time
 driver = webdriver.Edge()
 
 # Get website
-driver.get('http://mycapstone.free.nf/Website/views/login.php?i=1')
+driver.get('http://mycapstone.free.nf/views/login.php')
 
 
 # Find necessary elements and input data
@@ -18,16 +18,22 @@ element_password = driver.find_element(By.ID, 'password').send_keys('Hello12345!
 
 
 # Switch context for captcha
+# Wait for the hCaptcha iframe and switch to it
 WebDriverWait(driver, 10).until(
-    EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//iframe[contains(@src, 'recaptcha/api2/anchor')]"))
+    EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//iframe[contains(@title, 'hCaptcha')]"))
 )
+
+# Wait for the hCaptcha checkbox and click it
 WebDriverWait(driver, 10).until(
-    EC.element_to_be_clickable((By.CSS_SELECTOR, 'div.recaptcha-checkbox-border'))
+    EC.element_to_be_clickable((By.CSS_SELECTOR, 'div[role="checkbox"]'))
 ).click()
+
+# Switch back to the main content
 driver.switch_to.default_content()
 
 # Submit form
+WebDriverWait(driver, 30)
 element_form = driver.find_element(By.TAG_NAME, 'form').submit()
 
-time.sleep(10)
+time.sleep(120)
 driver.quit()
