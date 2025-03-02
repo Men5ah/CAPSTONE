@@ -19,7 +19,7 @@ $csvFile = '../data/interactions.csv';
 
 // Check if CSV file exists, create it with headers if not
 if (!file_exists($csvFile)) {
-    $headers = ['session_id', 'mouse_movement', 'typing_patterns', 'click_behaviors', 'page_dwell_time', 'scroll_interaction', 'time_between_requests', 'user_agent', 'ip_address'];
+    $headers = ['session_id', 'mouse_movement', 'typing_patterns', 'click_behaviors', 'page_dwell_time', 'user_agent', 'ip_address'];
     file_put_contents($csvFile, implode(",", $headers) . "\n");
 }
 
@@ -30,8 +30,8 @@ $csvRow = [
     json_encode($data['typingPatterns']),
     json_encode($data['clickBehaviors']),
     $data['pageDwellTime'],
-    json_encode($data['scrollInteraction']),
-    json_encode($data['timeBetweenRequests']),
+    // json_encode($data['scrollInteraction']),
+    // json_encode($data['timeBetweenRequests']),
     $data['userAgent'],
     $data['ipAddress']
 ];

@@ -1,277 +1,56 @@
-# # # Import necessary libraries
-# from selenium import webdriver
-# from selenium.webdriver.common.by import By
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.support import expected_conditions as EC
-# from selenium.webdriver.common.action_chains import ActionChains
-# import time
-# import csv
-# import random
-
-# # Load credentials from CSV file
-# def load_credentials(file_path):
-#     credentials = []
-#     with open(file_path, mode='r', encoding='utf-8') as file:
-#         reader = csv.DictReader(file)
-#         for row in reader:
-#             credentials.append({"email": row["email"], "password": row["password"]})
-#     random.shuffle(credentials)  # Shuffle for randomness
-#     return credentials
-
-# # Initialize WebDriver (Edge in this case)
-# def init_driver():
-#     options = webdriver.EdgeOptions()
-#     # options.add_argument("--headless")  # Run in headless mode (optional)
-#     options.add_argument("--disable-blink-features=AutomationControlled")  # Avoid detection
-#     driver = webdriver.Edge(options=options)
-#     return driver
-
-# # Move mouse to element and click
-# def move_and_click(driver, element):
-#     action = ActionChains(driver)
-#     action.move_to_element(element).pause(random.uniform(0.3, 1)).click().perform()
-
-# # Perform login with given credentials
-# def login(driver, email, password):
-#     driver.get('http://localhost/Projects/CAPSTONE/Website/views/login.php')
-
-#     try:
-#         # Find input fields and enter credentials
-#         driver.find_element(By.ID, 'email').send_keys(email)
-#         driver.find_element(By.ID, 'password').send_keys(password)
-
-#         # Submit form
-#         driver.find_element(By.TAG_NAME, 'form').submit()
-
-#         # Wait for response (modify as needed)
-#         time.sleep(3)
-
-#     except Exception as e:
-#         print(f"Error logging in with {email}: {e}")
-
-# # Main Execution
-# if __name__ == "__main__":
-#     credentials_list = load_credentials("c:/xampp/htdocs/Projects/CAPSTONE/Bot/MOCK_DATA_test.csv")
-    
-#     for credential in credentials_list:
-#         print(f"Trying login: {credential['email']} | {credential['password']}")
-
-#         driver = init_driver()  # Create new driver instance
-#         login(driver, credential['email'], credential['password'])
-
-#         driver.quit()  # Close browser instance after each attempt
-#         time.sleep(random.uniform(1, 5))  # Random delay to simulate human behavior
-
-# # Import necessary libraries
-# from selenium import webdriver
-# from selenium.webdriver.common.by import By
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.support import expected_conditions as EC
-# from selenium.webdriver.common.action_chains import ActionChains
-# import time
-# import csv
-# import random
-
-# # Load credentials from CSV file
-# def load_credentials(file_path):
-#     credentials = []
-#     with open(file_path, mode='r', encoding='utf-8') as file:
-#         reader = csv.DictReader(file)
-#         for row in reader:
-#             credentials.append({"email": row["email"], "password": row["password"]})
-#     random.shuffle(credentials)  # Shuffle for randomness
-#     return credentials
-
-# # Initialize WebDriver (Edge in this case)
-# def init_driver():
-#     options = webdriver.EdgeOptions()
-#     options.add_argument("--headless")  # Run in headless mode
-#     options.add_argument("--disable-blink-features=AutomationControlled")  # Avoid detection
-#     driver = webdriver.Edge(options=options)
-#     return driver
-
-# # Move mouse to element and click
-# def move_and_click(driver, element):
-#     action = ActionChains(driver)
-#     action.move_to_element(element).pause(random.uniform(0.3, 1)).click().perform()
-
-# # Simulate human-like typing
-# def type_like_human(element, text):
-#     for char in text:
-#         element.send_keys(char)
-#         time.sleep(random.uniform(0.05, 0.5))  # Varying delay between keystrokes
-
-# # Perform login with given credentials
-# def login(driver, email, password):
-#     driver.get('http://localhost/Projects/CAPSTONE/Website/views/login.php')
-
-#     try:
-#         # Wait for the email field to appear
-#         email_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'email')))
-#         password_field = driver.find_element(By.ID, 'password')
-#         login_button = driver.find_element(By.XPATH, '//button[@type="submit"]')  # Adjust if necessary
-
-#         # Type credentials like a human
-#         type_like_human(email_field, email)
-#         type_like_human(password_field, password)
-
-#         # Click login button instead of using form.submit()
-#         move_and_click(driver, login_button)
-
-#         # Wait for response (increase if necessary)
-#         time.sleep(random.uniform(3, 6))
-
-#     except Exception as e:
-#         print(f"Error logging in with {email}: {e}")
-
-# # Main Execution
-# if __name__ == "__main__":
-#     credentials_list = load_credentials("c:/xampp/htdocs/Projects/CAPSTONE/Bot/MOCK_DATA_test.csv")
-    
-#     for credential in credentials_list:
-#         print(f"Trying login: {credential['email']} | {credential['password']}")
-
-#         driver = init_driver()  # Create new driver instance
-#         login(driver, credential['email'], credential['password'])
-
-#         driver.quit()  # Close browser instance after each attempt
-#         time.sleep(random.uniform(1, 5))  # Random delay to simulate human behavior
-
-# # Import necessary libraries
-# from selenium import webdriver
-# from selenium.webdriver.common.by import By
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.support import expected_conditions as EC
-# from selenium.webdriver.common.action_chains import ActionChains
-# import time
-# import csv
-# import random
-# from fake_useragent import UserAgent
-
-# # Load credentials from CSV file
-# def load_credentials(file_path):
-#     credentials = []
-#     with open(file_path, mode='r', encoding='utf-8') as file:
-#         reader = csv.DictReader(file)
-#         for row in reader:
-#             credentials.append({"email": row["email"], "password": row["password"]})
-#     random.shuffle(credentials)  # Shuffle for randomness
-#     return credentials
-
-# # List of proxy IP addresses (Replace with working proxies)
-# # PROXY_LIST = [
-# #     "154.16.192.70:3128",
-# #     "45.79.208.5:3128",
-# #     "178.128.221.243:8080",
-# #     "64.225.8.110:9990"
-# # ]
-
-# # Function to initialize WebDriver with dynamic user-agent and proxy
-# def init_driver():
-#     ua = UserAgent()  # Initialize user agent generator
-#     user_agent = ua.random  # Get a random user agent
-
-#     # proxy = random.choice(PROXY_LIST)  # Pick a random proxy
-
-#     options = webdriver.EdgeOptions()
-#     options.add_argument(f"user-agent={user_agent}")  # Set random User-Agent
-#     # options.add_argument(f"--proxy-server={proxy}")  # Use random proxy
-#     options.add_argument("--disable-blink-features=AutomationControlled")  # Avoid detection
-    
-#     print(f"Using User-Agent: {user_agent}")
-#     # print(f"Using Proxy: {proxy}")
-
-#     driver = webdriver.Edge(options=options)
-#     return driver
-
-# # Move mouse to element and click
-# def move_and_click(driver, element):
-#     action = ActionChains(driver)
-#     action.move_to_element(element).pause(random.uniform(0.3, 1)).click().perform()
-
-# # Simulate human-like typing
-# def type_like_human(element, text):
-#     for char in text:
-#         element.send_keys(char)
-#         time.sleep(random.uniform(0.05, 0.2))  # Varying delay between keystrokes
-
-# # Perform login with given credentials
-# def login(driver, email, password):
-#     driver.get('http://localhost/Projects/CAPSTONE/Website/views/login.php')
-
-#     try:
-#         # Wait for the email field to appear
-#         email_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'email')))
-#         password_field = driver.find_element(By.ID, 'password')
-#         login_button = driver.find_element(By.XPATH, '//button[@type="submit"]')  # Adjust if necessary
-
-#         # Type credentials like a human
-#         type_like_human(email_field, email)
-#         type_like_human(password_field, password)
-
-#         # Click login button instead of using form.submit()
-#         move_and_click(driver, login_button)
-
-#         # Wait for response (increase if necessary)
-#         time.sleep(random.uniform(3, 6))
-
-#     except Exception as e:
-#         print(f"Error logging in with {email}: {e}")
-
-# # Main Execution
-# if __name__ == "__main__":
-#     credentials_list = load_credentials("c:/xampp/htdocs/Projects/CAPSTONE/Bot/MOCK_DATA_test.csv")
-    
-#     for credential in credentials_list:
-#         print(f"Trying login: {credential['email']} | {credential['password']}")
-
-#         driver = init_driver()  # Create new driver instance with a random user-agent and proxy
-#         login(driver, credential['email'], credential['password'])
-
-#         driver.quit()  # Close browser instance after each attempt
-#         time.sleep(random.uniform(1, 5))  # Random delay to simulate human behavior
-
-
-# Import necessary libraries
+import os
+import time
+import csv
+import random
+import multiprocessing
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-import time
-import csv
-import random
 from fake_useragent import UserAgent
 
-# Load credentials from CSV file
+# Load credentials from CSV
 def load_credentials(file_path):
     credentials = []
     with open(file_path, mode='r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
             credentials.append({"email": row["email"], "password": row["password"]})
-    random.shuffle(credentials)  # Shuffle for randomness
+    random.shuffle(credentials)  # Shuffle credentials for randomness
     return credentials
 
-# Load proxies from a file
-def load_proxies(file_path):
-    with open(file_path, "r") as file:
-        return [line.strip() for line in file if line.strip()]
+# NordVPN Server Locations
+NORDVPN_SERVERS = ["United States", "Canada", "Germany", "France", "United Kingdom", "Ghana", "Japan", "Nigeria", "Denmark"]
 
-# Function to initialize WebDriver with dynamic user-agent and proxy
-def init_driver(proxy):
+# Function to switch VPN server
+def switch_vpn():
+    """Switches NordVPN server at intervals to avoid multiple VPN connections."""
+    server = random.choice(NORDVPN_SERVERS)
+    nordvpn_path = r'"C:/Program Files/NordVPN/"'
+    os.system(f"nordvpn -c -g {server}")
+    print(f"🔄 Switched VPN to {server}")
+    time.sleep(15)  # Allow time for VPN to fully connect
+
+# Function to disconnect VPN
+def disconnect_vpn():
+    """Disconnects NordVPN after the script is done."""
+    nordvpn_path = r'"C:/Program Files/NordVPN/"'
+    os.system(f"{nordvpn_path} disconnect")
+    print("🔴 VPN Disconnected.")
+
+# Initialize WebDriver
+def init_driver():
     ua = UserAgent()
-    user_agent = ua.random  # Get a random User-Agent
+    user_agent = ua.random  # Generate a random user agent
 
     options = webdriver.EdgeOptions()
-    options.add_argument(f"user-agent={user_agent}")  # Set random User-Agent
-    options.add_argument("--disable-blink-features=AutomationControlled")  # Avoid detection
+    options.add_argument(f"user-agent={user_agent}")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--headless")  # Run in headless mode
+    options.add_argument("--disable-images")
 
-    if proxy:
-        options.add_argument(f"--proxy-server={proxy}")  # Set proxy
-
-    print(f"Using User-Agent: {user_agent}")
-    print(f"Using Proxy: {proxy}")
+    print(f"🕵️ Using User-Agent: {user_agent}")
 
     driver = webdriver.Edge(options=options)
     return driver
@@ -279,49 +58,58 @@ def init_driver(proxy):
 # Move mouse to element and click
 def move_and_click(driver, element):
     action = ActionChains(driver)
-    action.move_to_element(element).pause(random.uniform(0.3, 3)).click().perform()
+    action.move_to_element(element).pause(random.uniform(0.3, 1)).click().perform()
 
 # Simulate human-like typing
 def type_like_human(element, text):
     for char in text:
         element.send_keys(char)
-        time.sleep(random.uniform(0.05, 0.5))  # Varying delay between keystrokes
+        time.sleep(random.uniform(0.05, 0.2))  # Varying delay between keystrokes
 
-# Perform login with given credentials
-def login(driver, email, password):
+# Perform login
+def login(credential):
+    driver = init_driver()
     driver.get('http://localhost/Projects/CAPSTONE/Website/views/login.php')
 
     try:
-        # Wait for the email field to appear
         email_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'email')))
         password_field = driver.find_element(By.ID, 'password')
-        login_button = driver.find_element(By.XPATH, '//button[@type="submit"]')  # Adjust if necessary
+        login_button = driver.find_element(By.XPATH, '//button[@type="submit"]')
 
-        # Type credentials like a human
-        type_like_human(email_field, email)
-        type_like_human(password_field, password)
+        type_like_human(email_field, credential["email"])
+        type_like_human(password_field, credential["password"])
 
-        # Click login button instead of using form.submit()
         move_and_click(driver, login_button)
 
-        # Wait for response (increase if necessary)
         time.sleep(random.uniform(3, 6))
 
     except Exception as e:
-        print(f"Error logging in with {email}: {e}")
+        print(f"⚠️ Error logging in with {credential['email']}: {e}")
+
+    driver.quit()
+
+# Run logins in parallel
+def process_batch(credentials_batch):
+    """Runs login attempts in parallel using multiprocessing."""
+    with multiprocessing.Pool(processes=len(credentials_batch)) as pool:
+        pool.map(login, credentials_batch)
 
 # Main Execution
 if __name__ == "__main__":
-    credentials_list = load_credentials("c:/xampp/htdocs/Projects/CAPSTONE/Bot/MOCK_DATA_test.csv")
-    proxies_list = load_proxies("c:/xampp/htdocs/Projects/CAPSTONE/Bot/proxies/data.txt")
+    credentials_list = load_credentials("c:/xampp/htdocs/Projects/CAPSTONE/Bot/credentials1-5.csv")
 
-    for i, credential in enumerate(credentials_list):
-        proxy = proxies_list[i % len(proxies_list)]  # Rotate proxies
-        print(f"🔄 Using Proxy: {proxy}")
-        print(f"🔐 Trying Login: {credential['email']} | {credential['password']}")
+    BATCH_SIZE = 10  # Number of logins before switching VPN
 
-        driver = init_driver(proxy)  # Create WebDriver instance with proxy
-        login(driver, credential['email'], credential['password'])
+    # switch_vpn()  # 🔄 Connect to VPN initially
 
-        driver.quit()  # Close browser instance
-        time.sleep(random.uniform(1, 5))  # Random delay to simulate human behavior
+    for i in range(0, len(credentials_list), BATCH_SIZE):
+        batch = credentials_list[i:i + BATCH_SIZE]
+        print(f"🔹 Processing batch {i // BATCH_SIZE + 1} with {len(batch)} accounts")
+
+        process_batch(batch)  # Run logins in parallel
+
+        # if i + BATCH_SIZE < len(credentials_list):  # Don't switch VPN on the last batch
+            # print("🔄 Switching VPN after batch...")
+            # switch_vpn()
+
+    # disconnect_vpn()  # Disconnect VPN when script is done

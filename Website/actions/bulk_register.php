@@ -3,7 +3,7 @@ include_once "../settings/connection.php";
 $conn = get_connection();
 
 // Open the CSV file
-$csvFile = fopen("C:/xampp/htdocs/Projects/CAPSTONE/Bot/credentials2.csv", "r");
+$csvFile = fopen("C:/xampp/htdocs/Projects/CAPSTONE/Bot/credentials14.csv", "r");
 
 // Skip the header row (if it exists)
 fgetcsv($csvFile);

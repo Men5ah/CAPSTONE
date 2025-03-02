@@ -14,8 +14,8 @@ let interactionData = JSON.parse(sessionStorage.getItem("interactionData")) || {
     typingPatterns: [],
     clickBehaviors: [],
     pageDwellTime: 0,
-    scrollInteraction: [],
-    timeBetweenRequests: [],
+    // scrollInteraction: [],
+    // timeBetweenRequests: [],
     userAgent: navigator.userAgent,
     ipAddress: null
 };
@@ -39,19 +39,19 @@ document.addEventListener("click", (event) => {
 });
 
 // Track scroll behavior
-document.addEventListener("scroll", () => {
-    interactionData.scrollInteraction.push({ scrollTop: window.scrollY, time: Date.now() });
-    sessionStorage.setItem("interactionData", JSON.stringify(interactionData));
-});
+// document.addEventListener("scroll", () => {
+//     interactionData.scrollInteraction.push({ scrollTop: window.scrollY, time: Date.now() });
+//     sessionStorage.setItem("interactionData", JSON.stringify(interactionData));
+// });
 
 // Track time between requests
-let lastRequestTime = Date.now();
-function trackRequest() {
-    let now = Date.now();
-    interactionData.timeBetweenRequests.push(now - lastRequestTime);
-    lastRequestTime = now;
-    sessionStorage.setItem("interactionData", JSON.stringify(interactionData));
-}
+// let lastRequestTime = Date.now();
+// function trackRequest() {
+//     let now = Date.now();
+//     interactionData.timeBetweenRequests.push(now - lastRequestTime);
+//     lastRequestTime = now;
+//     sessionStorage.setItem("interactionData", JSON.stringify(interactionData));
+// }
 
 // Track page dwell time
 let startTime = Date.now();
