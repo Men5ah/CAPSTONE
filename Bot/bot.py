@@ -157,7 +157,7 @@ def init_driver():
     options = webdriver.EdgeOptions()
     options.add_argument(f"user-agent={user_agent}")
     options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("--headless")  # Run in headless mode
+    # options.add_argument("--headless")  # Run in headless mode
     options.add_argument("--disable-images")
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
@@ -224,7 +224,7 @@ def main():
         batch = credentials[batch_start:batch_end]
 
         logger.info(f"🚀 Processing batch {i + 1}/{total_batches} with {len(batch)} credentials")
-        switch_vpn()  # Switch VPN before processing each batch
+        # switch_vpn()  # Switch VPN before processing each batch
         process_batch(batch)
         time.sleep(5)  # Add a delay between batches
 
