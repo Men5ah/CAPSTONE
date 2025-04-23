@@ -86,6 +86,7 @@ def perform_eda(df, name, num_features, cat_features):
     plt.ylabel('Count', fontsize=12)
     plt.tight_layout()
     plt.show()
+
     # Numerical features distribution
     valid_num_features = [col for col in num_features if col in df_eda.columns]
     if valid_num_features:
@@ -104,6 +105,7 @@ def perform_eda(df, name, num_features, cat_features):
         plt.suptitle(f'Numerical Features Distribution - {name}', fontsize=16, y=1.02)
         plt.tight_layout()
         plt.show()
+
     # Correlation matrix
     valid_corr_features = [col for col in num_features + ['is_bot'] if col in df_eda.columns]
     if len(valid_corr_features) > 1:
@@ -217,110 +219,3 @@ def evaluate_model(model, X_test, y_test, model_name):
     print(f"\nClassification Report - {model_name}:")
     print(classification_report(y_test, y_pred))
     return metrics
-
-def main():
-    clean_train, clean_test, noisy_train, noisy_test = load_datasets()
-    num_features, cat_features = get_feature_types(clean_train)
-    perform_eda(clean_train, 'Clean Training Data', num_features, cat_features)
-    perform_eda(noisy_train, 'Noisy Training Data', num_features, cat_features)
-    X_clean_train, y_clean_train, X_clean_test, y_clean_test, clean_preprocessor = process_data(clean_train, clean_test, num_features, cat_features)
-    X_noisy_train, y_noisy_train, X_noisy_test, y_noisy_test, noisy_preprocessor = process_data(noisy_train, noisy_test, num_features, cat_features)
-    processed_data = {
-        'clean': {
-            'X_train': X_clean_train,
-            'y_train': y_clean_train,
-            'X_test': X_clean_test,
-            'y_test': y_clean_test,
-            'X_train_rnn': prepare_rnn_data(X_clean_train)[0],
-            'y_train_rnn': y_clean_train,
-            'X_test_rnn': prepare_rnn_data(X_clean_test)[0],
-            'preprocessor': clean_preprocessor
-        },
-        'noisy': {
-            'X_train': X_noisy_train,
-            'y_train': y_noisy_train,
-            'X_test': X_noisy_test,
-            'y_test': y_noisy_test,
-            'X_train_rnn': prepare_rnn_data(X_noisy_train)[0],
-            'y_train_rnn': y_noisy_train,
-            'X_test_rnn': prepare_rnn_data(X_noisy_test)[0],
-            'preprocessor': noisy_preprocessor
-        }
-    }
-    print("\n=== Feature Importance - Clean Training Data ===")
-    clean_importance = analyze_feature_importance(processed_data['clean']['X_train'], processed_data['clean']['y_train'], processed_data['clean']['X_train'].columns.tolist())
-    print("\n=== Feature Importance - Noisy Training Data ===")
-    noisy_importance = analyze_feature_importance(processed_data['noisy']['X_train'], processed_data['noisy']['y_train'], processed_data['noisy']['X_train'].columns.tolist())
-    def train_and_evaluate_models(X_train, y_train, X_test, y_test, X_train_rnn=None, y_train_rnn=None, X_test_rnn=None, data_type='Clean'):
-        results = {}
-        print(f"\n=== Training RNN ({data_type} Data) ===")
-        rnn_model = build_rnn((X_train_rnn.shape[1], X_train_rnn.shape[2]))
-        early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
-        rnn_model.fit(X_train_rnn, y_train_rnn, epochs=50, batch_size=32, validation_split=0.2, callbacks=[early_stopping], verbose=1)
-        results['RNN'] = evaluate_model(rnn_model, X_test_rnn, y_test, f'RNN ({data_type})')
-        print(f"\n=== Training LSTM ({data_type} Data) ===")
-        lstm_model = build_lstm((X_train_rnn.shape[1], X_train_rnn.shape[2]))
-        lstm_model.fit(X_train_rnn, y_train_rnn, epochs=50, batch_size=32, validation_split=0.2, callbacks=[early_stopping], verbose=1)
-        results['LSTM'] = evaluate_model(lstm_model, X_test_rnn, y_test, f'LSTM ({data_type})')
-        print(f"\n=== Training ConvLSTM ({data_type} Data) ===")
-        # Prepare ConvLSTM data: reshape to (samples, time_steps, rows=1, cols=features, channels=1)
-        X_train_conv = X_train_rnn.reshape((X_train_rnn.shape[0], X_train_rnn.shape[1], 1, X_train_rnn.shape[2], 1))
-        X_test_conv = X_test_rnn.reshape((X_test_rnn.shape[0], X_test_rnn.shape[1], 1, X_test_rnn.shape[2], 1))
-        convlstm_model = build_convlstm((X_train_conv.shape[1], X_train_conv.shape[2], X_train_conv.shape[3], X_train_conv.shape[4]))
-        convlstm_model.fit(X_train_conv, y_train_rnn, epochs=50, batch_size=32, validation_split=0.2, callbacks=[early_stopping], verbose=1)
-        results['ConvLSTM'] = evaluate_model(convlstm_model, X_test_conv, y_test, f'ConvLSTM ({data_type})')
-        return results
-    clean_results = train_and_evaluate_models(
-        processed_data['clean']['X_train'],
-        processed_data['clean']['y_train'],
-        processed_data['clean']['X_test'],
-        processed_data['clean']['y_test'],
-        processed_data['clean']['X_train_rnn'],
-        processed_data['clean']['y_train_rnn'],
-        processed_data['clean']['X_test_rnn'],
-        'Clean'
-    )
-    noisy_results = train_and_evaluate_models(
-        processed_data['noisy']['X_train'],
-        processed_data['noisy']['y_train'],
-        processed_data['noisy']['X_test'],
-        processed_data['noisy']['y_test'],
-        processed_data['noisy']['X_train_rnn'],
-        processed_data['noisy']['y_train_rnn'],
-        processed_data['noisy']['X_test_rnn'],
-        'Noisy'
-    )
-    def create_comparison_df(clean_results, noisy_results):
-        metrics = ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']
-        comparison = []
-        for model in clean_results.keys():
-            clean_row = {'Model': model, 'Dataset': 'Clean'}
-            noisy_row = {'Model': model, 'Dataset': 'Noisy'}
-            for metric in metrics:
-                clean_row[metric] = clean_results[model][metric]
-                noisy_row[metric] = noisy_results.get(model, {}).get(metric, np.nan)
-            comparison.extend([clean_row, noisy_row])
-        return pd.DataFrame(comparison)
-    comparison_df = create_comparison_df(clean_results, noisy_results)
-    print("\n=== Model Performance Comparison ===")
-    print(comparison_df.to_string(index=False))
-    plt.figure(figsize=(15, 8))
-    metrics = ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']
-    x = np.arange(len(clean_results.keys()))
-    width = 0.35
-    for i, metric in enumerate(metrics, 1):
-        plt.subplot(2, 3, i)
-        clean_vals = [clean_results[model].get(metric, 0) for model in clean_results.keys()]
-        noisy_vals = [noisy_results[model].get(metric, 0) for model in clean_results.keys()]
-        plt.bar(x - width/2, clean_vals, width, label='Clean')
-        plt.bar(x + width/2, noisy_vals, width, label='Noisy')
-        plt.title(metric.capitalize())
-        plt.xticks(x, clean_results.keys())
-        plt.ylim(0, 1)
-        plt.legend()
-    plt.suptitle('Model Performance: Clean vs Noisy Data', y=1.02)
-    plt.tight_layout()
-    plt.show()
-
-if __name__ == "__main__":
-    main()
