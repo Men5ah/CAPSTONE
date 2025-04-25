@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 import logging
 from typing import Dict, Any, Union, List
+import requests
 from tensorflow.keras.models import load_model
 
 # Set up logging

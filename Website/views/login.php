@@ -27,6 +27,6 @@ if(isset($_GET['error'])) {
 
         <button type="submit" name="login">Login</button>
     </form>
-    <script src="../js/interaction.js"></script>
+    <script src="../js/interaction_new.js"></script>
 </body>
 </html>

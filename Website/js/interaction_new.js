@@ -70,7 +70,7 @@ function isNewDevice() {
 // Estimate if access is at an unusual time (basic heuristic)
 function isUnusualAccessTime() {
     const hour = new Date().getHours();
-    return hour >= 23 || hour < 5;
+    return hour >= 22 || hour < 5;
 }
 
 // Calculate mouse speed (pixels/sec)
@@ -127,7 +127,7 @@ let failedLogins = window.failedLogins || 0;
 // Derived values
 let unusualTimeAccess = isUnusualAccessTime();
 let newDeviceLogin = isNewDevice();
-let sessionDurationDeviation = null;  // Will be set before unload
+let sessionDurationDeviation = null;  // Will be set on login
 let networkPacketSizeVariance = null; // Not feasible client-side
 let ipRepScore = null; // Optional: Get from backend using interactionData.ipAddress
 
@@ -153,7 +153,7 @@ function prepareDataForFlask() {
 // Send interaction data to Flask backend
 function sendDataToFlask() {
     const dataToSend = prepareDataForFlask();
-    fetch("http://localhost:5000/api/interaction", {
+    return fetch("http://localhost:5001/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataToSend)
@@ -162,14 +162,26 @@ function sendDataToFlask() {
     });
 }
 
-// Save session duration and trigger send before page unload
-window.addEventListener("beforeunload", () => {
-    const dwellTime = Date.now() - startTime;
-    interactionData.pageDwellTime = dwellTime;
+// Hook into login form submission to send data before submitting
+document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.querySelector("form[action='../actions/login_action.php']");
+    if (loginForm) {
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
 
-    // Store duration in cookies
-    updateDurationHistory(dwellTime);
+            // Calculate session duration deviation before sending
+            const dwellTime = Date.now() - startTime;
+            updateDurationHistory(dwellTime);
+            sessionDurationDeviation = calculateSessionDeviation(dwellTime);
 
-    sessionDurationDeviation = calculateSessionDeviation(dwellTime);
-    sendDataToFlask();
+            try {
+                await sendDataToFlask();
+            } catch (e) {
+                console.error("Failed to send interaction data:", e);
+            }
+
+            // Submit the form after sending data
+            loginForm.submit();
+        });
+    }
 });
