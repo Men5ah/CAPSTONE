@@ -266,8 +266,8 @@ def load_artifacts() -> Union[Dict[str, Any], None]:
     artifacts = {}
     
     # Load model - handling both SavedModel and H5 formats
-    model_path = 'C:/xampp/htdocs/Projects/CAPSTONE/Deployment/rnn_model_noisy'
-    model_h5_path = 'C:/xampp/htdocs/Projects/CAPSTONE/Deployment/rnn_model_noisy.h5'
+    model_path = 'Deployment/rnn_model_noisy'
+    model_h5_path = 'Deployment/rnn_model_noisy.h5'
     
     try:
         # First try loading as H5 model if it exists
@@ -314,7 +314,7 @@ def load_artifacts() -> Union[Dict[str, Any], None]:
         return None
         
     # Load preprocessor
-    preprocessor_path = 'C:/xampp/htdocs/Projects/CAPSTONE/Deployment/preprocessor_noisy.pkl'
+    preprocessor_path = 'Deployment/preprocessor_noisy.pkl'
     try:
         if not st.session_state.get('api_mode', False):
             st.write(f"Checking if preprocessor file exists at: {preprocessor_path}")
@@ -334,7 +334,7 @@ def load_artifacts() -> Union[Dict[str, Any], None]:
         return None
         
     # Load feature info
-    feature_info_path = 'C:/xampp/htdocs/Projects/CAPSTONE/Deployment/feature_info_noisy.pkl'
+    feature_info_path = 'Deployment/feature_info_noisy.pkl'
     try:
         if not st.session_state.get('api_mode', False):
             st.write(f"Checking if feature info file exists at: {feature_info_path}")
