@@ -129,7 +129,7 @@ let unusualTimeAccess = isUnusualAccessTime();
 let newDeviceLogin = isNewDevice();
 let sessionDurationDeviation = null;  // Will be set on login
 let networkPacketSizeVariance = null; // Not feasible client-side
-let ipRepScore = null; // Optional: Get from backend using interactionData.ipAddress
+let ipRepScore = null; // Get from virustotal API
 
 // Prepare full payload
 function prepareDataForFlask() {
