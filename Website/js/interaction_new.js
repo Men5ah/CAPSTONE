@@ -420,7 +420,7 @@ function sendDataToFlask() {
     };
     
     // Use the Streamlit API endpoint instead of Flask
-    return fetch("http://localhost:8502/?api&predict", {
+    return fetch("https://mycapstoneapp.streamlit.app/?api&predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataWrapped)
