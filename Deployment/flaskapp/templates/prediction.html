@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNN Model Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Make Prediction</li>
+            </ol>
+        </nav>
+        
+        <h1 class="mb-4">Make RNN Model Prediction</h1>
+        
+        {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Input Data</h5>
+                <form method="POST" action="/ui/predict">
+                    <div class="mb-3">
+                        <label for="input_data" class="form-label">Enter JSON data (single record or array):</label>
+                        <textarea class="form-control" id="input_data" name="input_data" rows="10" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Predict</button>
+                </form>
+            </div>
+        </div>
+        
+        {% if result %}
+        <div class="card">
+            <div class="card-header">
+                Prediction Results
+            </div>
+            <div class="card-body">
+                <pre id="result">{{ result | tojson(indent=2) }}</pre>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Example data for the textarea
+        const exampleData = {
+            "feature1": [1, 2],
+            "feature2": [3, 4]
+        };
+        
+        // Add example data button
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('input_data');
+            if (textarea) {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'btn btn-outline-secondary btn-sm mt-2';
+                button.textContent = 'Load Example Data';
+                button.onclick = function() {
+                    textarea.value = JSON.stringify(exampleData, null, 2);
+                };
+                textarea.parentNode.appendChild(button);
+            }
+        });
+    </script>
+</body>
+</html>

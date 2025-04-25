@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNN Model Prediction App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        .card {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">RNN Model Prediction App</h1>
+        
+        <div class="alert alert-{{ 'success' if health_status == 'OK' else 'danger' }}">
+            Health Status: {{ health_status }}
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Make Predictions</h5>
+                        <p class="card-text">Upload your data and get predictions from the RNN model.</p>
+                        <a href="/ui/predict" class="btn btn-primary">Go to Prediction</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Model Information</h5>
+                        <p class="card-text">View details about the loaded model.</p>
+                        <a href="/ui/model_info" class="btn btn-info">View Model Info</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Feature Information</h5>
+                        <p class="card-text">View details about the features used by the model.</p>
+                        <a href="/ui/feature_info" class="btn btn-info">View Feature Info</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                API Usage Information
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">How to use this as an API</h5>
+                <p>This Flask app also functions as an API. Here are the available endpoints:</p>
+                
+                <h6>Make Predictions</h6>
+                <pre><code>POST /predict
+Content-Type: application/json
+
+{
+  "feature1": [1, 2],
+  "feature2": [3, 4]
+}</code></pre>
+                
+                <h6>Health Check</h6>
+                <pre><code>GET /health</code></pre>
+                
+                <h6>Get Model Info</h6>
+                <pre><code>GET /info</code></pre>
+                
+                <h6>Example using curl:</h6>
+                <pre><code>curl -X POST "http://localhost:5000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{"feature1":[1,2],"feature2":[3,4]}'</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

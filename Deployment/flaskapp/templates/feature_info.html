@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Information</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Feature Information</li>
+            </ol>
+        </nav>
+        
+        <h1 class="mb-4">Feature Information</h1>
+        
+        {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+        {% else %}
+        <div class="card mb-4">
+            <div class="card-header">
+                Feature Details
+            </div>
+            <div class="card-body">
+                <pre>{{ feature_info | tojson(indent=2) }}</pre>
+            </div>
+        </div>
+        
+        {% if feature_info.numerical_features %}
+        <div class="card mb-4">
+            <div class="card-header">
+                Numerical Features
+            </div>
+            <div class="card-body">
+                <ul>
+                {% for feature in feature_info.numerical_features %}
+                    <li>{{ feature }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if feature_info.categorical_features %}
+        <div class="card mb-4">
+            <div class="card-header">
+                Categorical Features
+            </div>
+            <div class="card-body">
+                <ul>
+                {% for feature in feature_info.categorical_features %}
+                    <li>{{ feature }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
