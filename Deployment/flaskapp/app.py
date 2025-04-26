@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import pandas as pd
 import numpy as np
 import joblib
@@ -17,6 +18,14 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+# ======== ADD CORS HANDLER HERE ========
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+# =======================================
 
 def load_artifacts() -> Union[Dict[str, Any], None]:
     """Load model, preprocessor, and feature info artifacts."""
@@ -30,7 +39,7 @@ def load_artifacts() -> Union[Dict[str, Any], None]:
         # First try loading as H5 model if it exists
         if os.path.exists(model_h5_path):
             try:
-                from tensorflow.keras.models import load_model
+                from tensorflow.python.keras.models import load_model
                 artifacts['model'] = load_model(model_h5_path, compile=True)
                 logger.info(f"Keras H5 model loaded successfully from {model_h5_path}")
                 artifacts['model_type'] = 'keras_h5'
