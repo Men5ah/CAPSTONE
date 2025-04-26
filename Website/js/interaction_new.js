@@ -245,8 +245,8 @@ function getBrowserType() {
 
 // User data initialization
 let userId = window.userId || "guest";
-let loginAttempts = window.loginAttempts || 10;
-let failedLogins = window.failedLogins || 4;
+let loginAttempts = window.loginAttempts || 0;
+let failedLogins = window.failedLogins || 0;
 let sessionDurationDeviation = 0;
 let networkPacketSizeVariance = estimateNetworkPacketVariance();
 let ipRepScore = 0.20;
@@ -391,16 +391,15 @@ document.addEventListener("keydown", function(event) {
     }
 });
 
-// Handle login form submission
 document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.querySelector("form[action='../actions/login_action.php']");
     if (loginForm) {
         loginForm.addEventListener("submit", async (event) => {
-            event.preventDefault();
+            event.preventDefault(); // Always stop normal submission first
 
             // Increment login attempts
             loginAttempts++;
-            
+
             // Update session metrics
             const dwellTime = Date.now() - startTime;
             updateDurationHistory(dwellTime);
@@ -409,52 +408,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
             try {
                 const result = await sendDataToFlask();
-                
-                if (result && result.length > 0 && result[0].prediction === 1) {
+
+                // Add hidden fields for backend tracking
+                addHiddenField(loginForm, 'login_attempts', loginAttempts);
+                addHiddenField(loginForm, 'failed_logins', failedLogins);
+
+                if (result && result.length > 0) {
+                    const prediction = result[0].prediction;
                     const confidence = parseFloat(result[0].probability);
-                    
-                    if (confidence > 0.8) {
-                        alert("Suspicious login activity detected. Please contact support.");
-                        return;
-                    } else if (confidence > 0.5) {
-                        if (confirm("Unusual login activity detected. Continue with login?")) {
-                            // Manually submit form with additional data
-                            const formData = new FormData(loginForm);
-                            formData.append('login_attempts', loginAttempts);
-                            formData.append('failed_logins', failedLogins);
-                            
-                            await fetch(loginForm.action, {
-                                method: 'POST',
-                                body: formData
-                            });
-                            return;
-                        } else {
-                            // Increment failed logins if user cancels
-                            failedLogins++;
-                            return;
+
+                    if (prediction === 1) {
+                        if (confidence > 0.8) {
+                            return blockLogin("Suspicious login activity detected. Please contact support.");
+                        } else if (confidence > 0.5) {
+                            return confirmLogin("Unusual login activity detected. Continue with login?", loginForm);
                         }
                     }
                 }
-                
-                // Normal form submission with additional data
-                const hiddenInput1 = document.createElement('input');
-                hiddenInput1.type = 'hidden';
-                hiddenInput1.name = 'login_attempts';
-                hiddenInput1.value = loginAttempts;
-                loginForm.appendChild(hiddenInput1);
-                
-                const hiddenInput2 = document.createElement('input');
-                hiddenInput2.type = 'hidden';
-                hiddenInput2.name = 'failed_logins';
-                hiddenInput2.value = failedLogins;
-                loginForm.appendChild(hiddenInput2);
-                
-                loginForm.submit();
-            } catch (e) {
-                console.error("Failed to send interaction data:", e);
-                // Fallback to normal form submission
-                loginForm.submit();
+
+                // If no issues, approve the login
+                approveLogin(loginForm);
+
+            } catch (error) {
+                console.error("Failed to send interaction data:", error);
+                approveLogin(loginForm); // Fail-safe: allow login if Flask server fails
             }
         });
     }
 });
+
+// Helper to add hidden inputs
+function addHiddenField(form, name, value) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+}
+
+// Block login with alert
+function blockLogin(message) {
+    alert(message);
+    return;
+}
+
+// Confirm login with the user
+function confirmLogin(message, form) {
+    if (confirm(message)) {
+        form.submit();
+    } else {
+        failedLogins++;
+    }
+    return;
+}
+
+// Approve login normally
+function approveLogin(form) {
+    form.submit();
+}
