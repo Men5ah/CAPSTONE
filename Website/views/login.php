@@ -25,7 +25,7 @@ if(isset($_GET['error'])) {
         <label for="password">Password</label>
         <input type="password" name="password" id="password"  placeholder="*********">
 
-        <button type="submit" name="login">Login</button>
+        <button type="submit" name="login" id="login_button">Login</button>
     </form>
     <script src="../js/interaction_new.js"></script>
 </body>

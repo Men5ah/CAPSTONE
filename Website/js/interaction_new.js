@@ -419,8 +419,10 @@ const loginForm = document.querySelector("form[action='../actions/login_action.p
 
 if (prediction === 1) {
     if (confidence > 0.8) {
-        alert("Suspicious login activity detected.");
-        window.location.href = '../views/landing.php'; // Adjust path as needed
+        alert("Suspicious login activity detected. You will be redirected shortly.");
+        setTimeout(function() {
+            window.location.href = '../views/landing.php'; // Adjust path as needed
+        }, 2000); // 2000 milliseconds = 2 seconds
         return;
     } else if (confidence > 0.5) {
         return confirmLogin("Unusual login activity detected. Continue with login?", loginForm);
@@ -428,8 +430,7 @@ if (prediction === 1) {
 }
                 }
                 // If no issues, approve the login
-                // approveLogin(loginForm);
-                window.location.href = '../views/homepage.php'; // Adjust path as needed
+                approveLogin(loginForm);
 
             } catch (error) {
                 console.error("Failed to send interaction data:", error);
