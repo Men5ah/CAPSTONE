@@ -392,7 +392,7 @@ document.addEventListener("keydown", function(event) {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.querySelector("form[action='../actions/login_action.php']");
+const loginForm = document.querySelector("form[action='../actions/login_action.php']");
     if (loginForm) {
         loginForm.addEventListener("submit", async (event) => {
             event.preventDefault(); // Always stop normal submission first
@@ -417,17 +417,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     const prediction = result[0].prediction;
                     const confidence = parseFloat(result[0].probability);
 
-                    if (prediction === 1) {
-                        if (confidence > 0.8) {
-                            return blockLogin("Suspicious login activity detected. Please contact support.");
-                        } else if (confidence > 0.5) {
-                            return confirmLogin("Unusual login activity detected. Continue with login?", loginForm);
-                        }
-                    }
+if (prediction === 1) {
+    if (confidence > 0.8) {
+        alert("Suspicious login activity detected.");
+        window.location.href = '../views/landing.php'; // Adjust path as needed
+        return;
+    } else if (confidence > 0.5) {
+        return confirmLogin("Unusual login activity detected. Continue with login?", loginForm);
+    }
+}
                 }
-
                 // If no issues, approve the login
-                approveLogin(loginForm);
+                // approveLogin(loginForm);
+                window.location.href = '../views/homepage.php'; // Adjust path as needed
 
             } catch (error) {
                 console.error("Failed to send interaction data:", error);
