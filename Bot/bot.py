@@ -123,8 +123,8 @@ def main():
     credentials = load_credentials("C:/xampp/htdocs/Projects/CAPSTONE/Bot/credentials/cred1.csv")
 
     for credential in credentials:
-        logger.info(f"🚀 Processing login for {credential['email']}")
-        switch_vpn()  # Optionally switch VPN before each login
+        logger.info(f"Processing login for {credential['email']}")
+        switch_vpn() 
         login(credential)
         time.sleep(5)  # Add a delay between logins
 
